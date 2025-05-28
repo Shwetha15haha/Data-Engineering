@@ -215,7 +215,61 @@ HAVING
 -- Since HAVING comes before SELECT, it doesn’t recognize column aliases, but ORDER BY does because it’s executed after SELECT.
 -- Any clause that executes before SELECT cannot use column aliases because those aliases haven’t been assigned yet.
 --DISTINCT : for removing duplicates
-SELECT
-  DISTINCT country
+SELECT DISTINCT
+  country
 FROM
   customers;
+
+--TOP : To return top required no. of rows 
+SELECT
+  TOP 2 *
+FROM
+  customers;
+
+--top customers with highest scores
+SELECT
+  TOP 3 *
+FROM
+  customers
+ORDER BY
+  score DESC;
+
+--customers with least scores
+SELECT
+  TOP 2 *
+FROM
+  customers
+ORDER BY
+  score ASC;
+
+--Most 2 recent orders
+SELECT
+  TOP 2 *
+FROM
+  orders
+ORDER BY
+  order_date DESC;
+
+--ORDER OF EXECUTION
+/*
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT DISTINCT
+6. ORDER BY
+7. TOP
+ */
+SELECT DISTINCT
+  TOP 2 country,
+  SUM(score)
+FROM
+  customers
+WHERE
+  score != 0
+GROUP BY
+  country
+HAVING
+  SUM(score) > 500
+ORDER BY
+  country;
