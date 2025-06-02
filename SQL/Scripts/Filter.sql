@@ -1,3 +1,4 @@
+--WHERE operators
 --Comparison Operators
 SELECT
   *
@@ -75,6 +76,7 @@ FROM
 WHERE
   score IS NOT NULL;
 
+--Range operator
 --BETWEEN
 SELECT
   *
@@ -83,6 +85,7 @@ FROM
 WHERE
   score BETWEEN 100 AND 500;
 
+--Membership operator
 --IN
 SELECT
   *
@@ -91,6 +94,7 @@ FROM
 WHERE
   country IN ('USA', 'Germany');
 
+--NOT IN
 SELECT
   *
 FROM
@@ -98,6 +102,7 @@ FROM
 WHERE
   country NOT IN ('USA', 'Germany');
 
+--Search operator
 --LIKE
 SELECT
   *
