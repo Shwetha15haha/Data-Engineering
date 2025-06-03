@@ -36,3 +36,26 @@ FROM
 -- - Use DISTINCT to filter out repeated rows.
 -- - Apply aggregation (GROUP BY) to consolidate duplicates.
 -- - Ensure unique relationships between the tables.
+--LEFT JOIN
+--All rows from left table and matching rows from right table
+--order of table matters
+SELECT
+  c.id,
+  c.first_name,
+  c.country,
+  o.order_id,
+  o.sales
+FROM
+  customers c
+  LEFT JOIN orders o ON c.id = o.customer_id;
+
+--RIGHT JOIN
+SELECT
+  c.id,
+  c.first_name,
+  c.country,
+  o.order_id,
+  o.sales
+FROM
+  customers c
+  RIGHT JOIN orders o ON c.id = o.customer_id;
