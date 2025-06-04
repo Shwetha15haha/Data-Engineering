@@ -59,3 +59,14 @@ SELECT
 FROM
   customers c
   RIGHT JOIN orders o ON c.id = o.customer_id;
+
+--FULL JOIN
+SELECT
+  c.id,
+  c.first_name,
+  c.country,
+  o.order_id,
+  o.sales
+FROM
+  customers c
+  FULL JOIN orders o ON c.id = o.customer_id;
