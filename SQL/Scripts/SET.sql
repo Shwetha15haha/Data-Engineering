@@ -5,3 +5,33 @@
 -- 4. Order of columns should be same
 -- 5. First query controls aliases
 -- Result can be incorrect if you match different columns even if it matches all above rules as it doesn't evaluate content itself
+--UNION
+--Returns distinct result set from both quries
+--Removes duplicates from result set
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Customers
+UNION
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Employees;
+
+--UNION ALL
+--Returns all rows including duuplicates
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Customers
+UNION ALL
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Employees;
+
+--UNION ALL is faster than UNION
