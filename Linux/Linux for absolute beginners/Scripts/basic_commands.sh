@@ -19,16 +19,16 @@ ls -ltr
 echo "Create a new file:"
 touch new.txt
 
-echo "Listing Specific File Details (Replace 'file_name' with actual file name):"
+echo "Listing Specific File Details:"
 ls -l new.txt
 
-echo "Creating a Directory (Replace 'dir_name' with actual directory name):"
+echo "Creating a Directory:"
 mkdir new
 
-echo "Removing a File (Replace 'file_name' with actual file name):"
+echo "Removing a File:"
 rm -f new.txt
 
-echo "Removing a Directory (Replace 'dir_name' with actual directory name):"
+echo "Removing a Directory:"
 rm -r new
 
 echo "Changing Directory (Parent directory):"
