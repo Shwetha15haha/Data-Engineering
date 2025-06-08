@@ -155,3 +155,17 @@ FROM
 --     missing
 -- )
 --MULTIPLE  TABLE JOINS
+SELECT
+  o.OrderID,
+  o.Sales,
+  c.FirstName CustomerFirstName,
+  c.LastName CustomerLastName,
+  p.Product as ProductName,
+  p.Price,
+  e.FirstName EmployeeFirstName,
+  e.LastName EmployeeLastName
+FROM
+  Sales.Orders o
+  LEFT JOIN Sales.Customers c ON o.CustomerID = c.CustomerID
+  LEFT JOIN Sales.Products p ON o.ProductID = p.ProductID
+  LEFT JOIN Sales.Employees e ON o.SalesPersonID = e.EmployeeID;
