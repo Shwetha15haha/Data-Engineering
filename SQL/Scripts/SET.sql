@@ -1,0 +1,7 @@
+-- Rules of SET Operators : UNION, INTERSECT, EXCEPT
+-- 1. Order by can be used only once  i.e at the end of query
+-- 2. Same number of columns selected in queries
+-- 3. Data type of columns selected must match
+-- 4. Order of columns should be same
+-- 5. First query controls aliases
+-- Result can be incorrect if you match different columns even if it matches all above rules as it doesn't evaluate content itself
