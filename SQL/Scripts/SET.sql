@@ -35,3 +35,30 @@ FROM
   Sales.Employees;
 
 --UNION ALL is faster than UNION
+--EXCEPT
+--Return rows that are not in second query
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Customers
+EXCEPT
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Employees;
+
+--INTERSECT
+--Return rows that are found in both query sets
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Customers
+INTERSECT
+SELECT
+  FirstName,
+  LastName
+FROM
+  Sales.Employees;
