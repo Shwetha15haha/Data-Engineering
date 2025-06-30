@@ -20,6 +20,39 @@ SELECT
 FROM
   Sales.Employees;
 
+-- Combine data from Orders and OrdersArchive without producing duplicates
+SELECT
+  'Orders' as Tablename,
+  ProductID,
+  CustomerID,
+  SalesPersonID,
+  OrderDate,
+  ShipDate,
+  OrderStatus,
+  ShipAddress,
+  BillAddress,
+  Quantity,
+  Sales,
+  CreationTime
+FROM
+  SalesDB.Sales.Orders
+UNION
+SELECT
+  'OrdersArchive' as Tablename,
+  ProductID,
+  CustomerID,
+  SalesPersonID,
+  OrderDate,
+  ShipDate,
+  OrderStatus,
+  ShipAddress,
+  BillAddress,
+  Quantity,
+  Sales,
+  CreationTime
+FROM
+  SalesDB.Sales.OrdersArchive;
+
 --UNION ALL
 --Returns all rows including duuplicates
 SELECT
@@ -37,6 +70,8 @@ FROM
 --UNION ALL is faster than UNION
 --EXCEPT
 --Return rows that are not in second query
+--Delta catchup
+--Data completeness check
 SELECT
   FirstName,
   LastName
