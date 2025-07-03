@@ -1,8 +1,8 @@
-SELECT 
-OrderDate,
-CreationTime,
-YEAR(CreationTime),
-DAY(CreationTime),
-MONTH(CreationTime)
+SELECT
+  OrderDate,
+  CreationTime,
+  YEAR (CreationTime) Year,
+  DAY (CreationTime) Day,
+  MONTH (CreationTime) Month
 FROM
-SalesDB.Sales.Orders;
+  SalesDB.Sales.Orders;
