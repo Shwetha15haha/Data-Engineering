@@ -69,3 +69,20 @@ FROM
   SalesDB.Sales.Orders
 GROUP BY
   DATETRUNC (YEAR, CreationTime);
+
+--EOMONTH
+--Last day of month
+SELECT
+  OrderID,
+  CreationTime,
+  EOMONTH (CreationTime)
+FROM
+  SalesDB.Sales.Orders;
+
+--First day of month
+SELECT
+  OrderID,
+  CreationTime,
+  DATETRUNC (MONTH, CreationTime) Month
+FROM
+  SalesDB.Sales.Orders;
