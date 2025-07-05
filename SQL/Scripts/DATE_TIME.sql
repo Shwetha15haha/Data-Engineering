@@ -40,6 +40,7 @@ FROM
 
 --DATETRUNC
 --To reset a time part to 00 and to reset date part to 01
+--Output data type is DATETIME
 SELECT
   OrderID,
   CreationTime,
@@ -72,6 +73,7 @@ GROUP BY
 
 --EOMONTH
 --Last day of month
+--Output datatype is DATE
 SELECT
   OrderID,
   CreationTime,
@@ -84,5 +86,64 @@ SELECT
   OrderID,
   CreationTime,
   DATETRUNC (MONTH, CreationTime) Month
+FROM
+  SalesDB.Sales.Orders;
+
+--Use case
+--How many orders placed each year?
+SELECT
+  YEAR (OrderDate) Year,
+  COUNT(*)
+FROM
+  SalesDB.Sales.Orders
+GROUP BY
+  YEAR (OrderDate);
+
+--How many orders placed each month?
+SELECT
+  MONTH (OrderDate) Month,
+  COUNT(*)
+FROM
+  SalesDB.Sales.Orders
+GROUP BY
+  MONTH (OrderDate);
+
+SELECT
+  DATENAME (MONTH, OrderDate) Month,
+  COUNT(*)
+FROM
+  SalesDB.Sales.Orders
+GROUP BY
+  DATENAME (MONTH, OrderDate);
+
+--hOw many orders placed in Febraury month?
+--Here use integer for filtering using MONTH function, avoid using DATENAME which gives string type output
+--for easy search by query analyser
+SELECT
+  *
+FROM
+  SalesDB.Sales.Orders
+WHERE
+  MONTH (OrderDate) = 2;
+
+--FORMAT
+SELECT
+  OrderID,
+  CreationTime,
+  FORMAT (CreationTime, 'MM-dd-yyyy'),
+  FORMAT (CreationTime, 'dd-MM-yyyy'),
+  FORMAT (CreationTime, 'dd'),
+  FORMAT (CreationTime, 'ddd'),
+  FORMAT (CreationTime, 'dddd'),
+  FORMAT (CreationTime, 'MM'),
+  FORMAT (CreationTime, 'MMM'),
+  FORMAT (CreationTime, 'MMMM')
+FROM
+  SalesDB.Sales.Orders;
+
+--show creationtime using this format: Day Wed Jan Q1 2025 12:34:56 PM
+SELECT
+  CreationTime,
+  'Day ' + FORMAT (CreationTime, 'ddd MMM ') + 'Q' + DATENAME (QUARTER, CreationTime) + ' ' + FORMAT (CreationTime, 'yyyy') + ' ' + FORMAT (CreationTime, 'hh:mm:ss tt')
 FROM
   SalesDB.Sales.Orders;
