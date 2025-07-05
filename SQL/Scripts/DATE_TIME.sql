@@ -147,3 +147,46 @@ SELECT
   'Day ' + FORMAT (CreationTime, 'ddd MMM ') + 'Q' + DATENAME (QUARTER, CreationTime) + ' ' + FORMAT (CreationTime, 'yyyy') + ' ' + FORMAT (CreationTime, 'hh:mm:ss tt')
 FROM
   SalesDB.Sales.Orders;
+
+--CONVERT
+--one data type to another data type, formatting-styling
+SELECT
+  CONVERT(INT, '123'),
+  CONVERT(DATE, '2025-07-05'),
+  CONVERT(DATE, CreationTime),
+  CONVERT(VARCHAR, CreationTime, 32),
+  CONVERT(VARCHAR, CreationTime, 34)
+FROM
+  SalesDB.Sales.Orders;
+
+--CAST
+SELECT
+  CAST('123' AS INT),
+  CAST('123' AS VARCHAR),
+  CAST('2025-07-05' AS DATE),
+  CAST('2025-07-05' AS DATETIME);
+
+--DATEADD
+--Add dates,subtract dates
+SELECT
+  OrderDate,
+  DATEADD (YEAR, 2, OrderDate),
+  DATEADD (DAY, 2, OrderDate),
+  DATEADD (DAY, -12, OrderDate)
+FROM
+  SalesDB.Sales.Orders;
+
+--DATEDIFF
+SELECT
+  OrderDate,
+  ShipDate,
+  DATEDIFF (DAY, OrderDate, ShipDate)
+FROM
+  SalesDB.Sales.Orders;
+
+SELECT
+  EmployeeID,
+  Birthdate,
+  DATEDIFF (Year, Birthdate, GETDATE ())
+FROM
+  SalesDB.Sales.Employees;
