@@ -190,3 +190,76 @@ SELECT
   DATEDIFF (Year, Birthdate, GETDATE ())
 FROM
   SalesDB.Sales.Employees;
+
+--Find average shipping durations in days for each month
+SELECT
+  DATENAME (MONTH, OrderDate) month_name,
+  AVG(DATEDIFF (DAY, OrderDate, ShipDate)) ship_durations
+FROM
+  SalesDB.Sales.Orders
+GROUP BY
+  DATENAME (MONTH, OrderDate);
+
+--Find the number of days between each order and the previous order
+SELECT
+  OrderID,
+  OrderDate current_orderdate,
+  LAG (OrderDate) OVER (
+    Order by
+      OrderID
+  ) previous_orderdate,
+  DATEDIFF (
+    DAY,
+    (
+      LAG (OrderDate) OVER (
+        Order by
+          OrderID
+      )
+    ),
+    OrderDate
+  ) gap
+FROM
+  SalesDB.Sales.Orders;
+
+--ISDATE
+--To check value is date or not
+--Returns if string value is valid date
+SELECT
+  ISDATE ('123') Datecheck1;
+
+SELECT
+  ISDATE ('2025-07-08') Datecheck2;
+
+SELECT
+  ISDATE ('2025-20-08') Datecheck3;
+
+SELECT
+  ISDATE ('08-07-2025') Datecheck4;
+
+SELECT
+  ISDATE ('2025') Datecheck5;
+
+SELECT
+  ISDATE ('2025-08') Datecheck6;
+
+SELECT
+  ISDATE ('08') Datecheck7;
+
+--Use case when casting if there is any string is not in correct dateformat then instaed of getting error, we flag and cast string that are in date format
+SELECT
+  OrderDate,
+  ISDATE (OrderDate),
+  CASE
+    WHEN ISDATE (OrderDate) = 1 THEN CAST(OrderDate as DATE)
+  END Newdate
+FROM
+  (
+    SELECT
+      '2025-08-07' AS OrderDate
+    UNION
+    SELECT
+      '2025-08' --not in date format and hence casting will fail
+    UNION
+    SELECT
+      '2025-08-20'
+  ) t
