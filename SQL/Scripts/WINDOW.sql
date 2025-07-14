@@ -216,3 +216,262 @@ FROM
   ) t
 WHERE
   Sales > avgsales;
+
+--Find highest and lowest sales across all orders
+--Find highest and lowest sales for each product
+--Additionally provide orderid, orderdate details
+SELECT
+  OrderID,
+  OrderDate,
+  ProductID,
+  Sales,
+  MAX(Sales) OVER () maxsale,
+  MIN(Sales) OVER () minsale,
+  MAX(Sales) OVER (
+    PARTITION BY
+      ProductID
+  ) highsalebyproduct,
+  MIN(Sales) OVER (
+    PARTITION BY
+      ProductID
+  ) lowsalebyproduct
+FROM
+  SalesDB.Sales.Orders;
+
+--show the employee who has the highest salary
+SELECT
+  *
+FROM
+  (
+    SELECT
+      *,
+      MAX(Salary) OVER () highestsalary
+    FROM
+      SalesDB.Sales.Employees
+  ) t
+WHERE
+  Salary = highestsalary;
+
+--Find the deviation of each sales from minimum and maximum sales amount
+SELECT
+  OrderID,
+  OrderDate,
+  ProductID,
+  Sales,
+  MAX(Sales) OVER () maxsale,
+  MIN(Sales) OVER () minsale,
+  Sales - MIN(Sales) OVER (),
+  Sales - MAX(Sales) OVER ()
+FROM
+  SalesDB.Sales.Orders;
+
+--Running total
+-- SUM(Sales) OVER (
+--   Order by
+--     Month
+-- ) 
+--Default
+--ROWS BETWEEN UNBOUNDED PRECEDING
+-- AND CURRENT ROW
+--Rolling total
+-- SUM(Sales) OVER (
+--   Order by
+--     MONTH
+-- ROWS BETWEEN PRECEDING 2
+-- AND CURRENT ROW )
+;
+
+--Calculate moving average of sales for each product over time
+SELECT
+  OrderId,
+  ProductID,
+  OrderDate,
+  Sales,
+  AVG(Sales) OVER (
+    PARTITION BY
+      ProductID
+  ) AvgSalesProduct,
+  AVG(Sales) OVER (
+    PARTITION BY
+      ProductID
+    ORDER BY
+      OrderDate
+  ) movingavg,
+  AVG(Sales) OVER (
+    PARTITION BY
+      ProductID
+    ORDER BY
+      OrderDate ROWS BETWEEN CURRENT ROW
+      AND 1 FOLLOWING
+  ) rollingavg
+FROM
+  SalesDB.Sales.Orders;
+
+--Rank the orders based on their sales from highest to lowest
+SELECT
+  OrderID,
+  OrderDate,
+  ProductID,
+  Sales,
+  ROW_NUMBER() OVER (
+    ORDER BY
+      Sales DESC
+  ) Salesrow_no,
+  RANK() OVER (
+    ORDER BY
+      Sales DESC
+  ) Salesrank_no,
+  DENSE_RANK() OVER (
+    ORDER BY
+      Sales DESC
+  ) Salesdenserank
+FROM
+  SalesDB.Sales.Orders;
+
+--Find the top highest sales for each product
+--Which function to use for top sale that is repeating, like 2 products have same highest sales?
+SELECT
+  *
+FROM
+  (
+    SELECT
+      OrderID,
+      OrderDate,
+      ProductID,
+      Sales,
+      ROW_NUMBER() OVER (
+        PARTITION BY
+          ProductID
+        ORDER BY
+          Sales DESC
+      ) Salesrow_no
+    FROM
+      SalesDB.Sales.Orders
+  ) t
+WHERE
+  Salesrow_no = 1;
+
+--Find the bottom 2 customers based on their total sales
+SELECT
+  *
+FROM
+  (
+    SELECT
+      CustomerID,
+      SUM(Sales) total_sales,
+      ROW_NUMBER() OVER (
+        ORDER BY
+          SUM(Sales) ASC
+      ) salesrank
+    FROM
+      SalesDB.Sales.Orders
+    GROUP BY
+      CustomerID
+  ) t
+WHERE
+  salesrank <= 2;
+
+--Assign new unique Ids
+SELECT
+  ROW_NUMBER() OVER (
+    ORDER BY
+      OrderID
+  ) unique_id,
+  *
+FROM
+  SalesDB.Sales.OrdersArchive;
+
+--Identify duplicate rows
+SELECT
+  *
+FROM
+  (
+    SELECT
+      ROW_NUMBER() OVER (
+        PARTITION BY
+          OrderID
+        ORDER BY
+          CreationTime DESC
+      ) rn,
+      *
+    FROM
+      SalesDB.Sales.OrdersArchive
+  ) t
+WHERE
+  rn = 1;
+
+--Find the products that fall within the highest 40% of the prices
+SELECT
+  *
+FROM
+  (
+    SELECT
+      Product,
+      Price,
+      CUME_DIST() OVER (
+        ORDER BY
+          Price DESC
+      ) DistRank
+    FROM
+      SalesDB.Sales.Products
+  ) t
+WHERE
+  DistRank <= 0.4;
+
+SELECT
+  *
+FROM
+  (
+    SELECT
+      Product,
+      Price,
+      PERCENT_RANK() OVER (
+        ORDER BY
+          Price DESC
+      ) DistRank
+    FROM
+      SalesDB.Sales.Products
+  ) t
+WHERE
+  DistRank <= 0.4;
+
+--NTILE
+SELECT
+  OrderID,
+  Sales,
+  NTILE (3) OVER (
+    Order by
+      Sales DESC
+  ) buckets
+FROM
+  SalesDB.Sales.Orders;
+
+--Segment all orders into 3 categories:high,medium, and low
+SELECT
+  *,
+  CASE
+    WHEN buckets = 1 THEN 'High'
+    WHEN buckets = 2 THEN 'Medium'
+    WHEN buckets = 3 THEN 'Low'
+  END sgments
+FROM
+  (
+    SELECT
+      Sales,
+      NTILE (3) OVER (
+        ORDER BY
+          Sales DESC
+      ) buckets
+    FROM
+      SalesDB.Sales.Orders
+  ) t;
+
+--LOAD balancing in ETL
+SELECT
+  NTILE (2) OVER (
+    ORDER BY
+      OrderId
+  ) buckets,
+  *
+FROM
+  SalesDB.Sales.Orders;
