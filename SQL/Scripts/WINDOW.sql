@@ -475,3 +475,107 @@ SELECT
   *
 FROM
   SalesDB.Sales.Orders;
+
+--LEAD&LAG
+--Analyze the month-over-month performance by finding the percentage change in sales btween the current and previous months
+SELECT
+  ordermonth,
+  current_total_sales,
+  previous_month_sales,
+  (current_total_sales - previous_month_sales) AS MoM_change,
+  ROUND(
+    (
+      CAST(
+        current_total_sales - previous_month_sales AS FLOAT
+      ) / NULLIF(previous_month_sales, 0) * 100
+    ),
+    1
+  ) AS MoM_Perc
+FROM
+  (
+    SELECT
+      MONTH (OrderDate) AS ordermonth,
+      SUM(Sales) AS current_total_sales,
+      LAG (SUM(Sales), 1) OVER (
+        ORDER BY
+          MONTH (OrderDate)
+      ) AS previous_month_sales
+    FROM
+      SalesDB.Sales.Orders
+    GROUP BY
+      MONTH (OrderDate)
+  ) t;
+
+--Inorder to analyze customer loyalty,  rank customers based on the average days between their orders
+SELECT
+  CustomerID,
+  AVG(DATEDIFF (DAY, OrderDate, previous_orderdate)) avgorderdays,
+  RANK() OVER (
+    ORDER BY
+      COALESCE(
+        AVG(DATEDIFF (DAY, OrderDate, previous_orderdate)),
+        99999
+      )
+  )
+FROM
+  (
+    SELECT
+      OrderID,
+      CustomerID,
+      OrderDate,
+      LEAD (OrderDate, 1) OVER (
+        PARTITION BY
+          CustomerID
+        ORDER BY
+          OrderDate
+      ) previous_orderdate
+    FROM
+      SalesDB.Sales.Orders
+  ) t
+GROUP BY
+  CustomerID;
+
+--FIRST AND LAST VALUE
+--Find the highest and lowest sales value for each product
+--Find the difference in sales between current sales and lowest sales
+SELECT
+  OrderID,
+  ProductID,
+  Sales,
+  FIRST_VALUE (Sales) OVER (
+    PARTITION BY
+      ProductID
+    ORDER BY
+      Sales
+  ) lowestsales,
+  LAST_VALUE (Sales) OVER (
+    PARTITION BY
+      ProductID
+    ORDER BY
+      Sales ROWS BETWEEN CURRENT ROW
+      AND UNBOUNDED FOLLOWING
+  ) highestsales,
+  -- FIRST_VALUE (Sales) OVER (
+  --   PARTITION BY
+  --     ProductID
+  --   ORDER BY
+  --     Sales DESC
+  -- ) highestsales2,
+  -- MAX(Sales) OVER (
+  --   PARTITION BY
+  --     ProductID
+  -- ) highestsales3,
+  -- MIN(Sales) OVER (
+  --   PARTITION BY
+  --     ProductID
+  -- ) lowestsales2
+  (
+    (Sales) - FIRST_VALUE (Sales) OVER (
+      PARTITION BY
+        ProductID
+      ORDER BY
+        Sales
+    )
+  ) salesdiff
+FROM
+  SalesDB.Sales.Orders;
