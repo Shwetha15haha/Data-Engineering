@@ -48,3 +48,25 @@ CREATE VIEW
       LEFT JOIN SalesDB.Sales.Customers c ON o.CustomerID = c.CustomerID
       LEFT JOIN SalesDB.Sales.Employees e ON o.SalesPersonID = e.EmployeeID
   );
+
+--Use case : Data security, exclude some columns or row level security
+CREATE VIEW
+  V_Order_Details_secured AS (
+    SELECT
+      o.OrderID,
+      o.OrderDate,
+      p.Product,
+      p.Category,
+      COALESCE(c.FirstName, '') + ' ' + COALESCE(c.LastName, '') CustomerName,
+      COALESCE(c.FirstName, '') + ' ' + COALESCE(c.LastName, '') SalesName,
+      e.Department,
+      o.Sales,
+      o.Quantity
+    FROM
+      SalesDB.Sales.Orders o
+      LEFT JOIN SalesDB.Sales.Products p ON o.ProductID = p.ProductID
+      LEFT JOIN SalesDB.Sales.Customers c ON o.CustomerID = c.CustomerID
+      LEFT JOIN SalesDB.Sales.Employees e ON o.SalesPersonID = e.EmployeeID
+    WHERE
+      c.Country != 'USA'
+  );
