@@ -44,3 +44,24 @@ WHERE
   Country = @Country END;
 
 EXEC GetCustomerStatsByCountry ;
+
+-- step 5: adding multiple queries to the stored procedure
+ALTER PROCEDURE GetCustomerStatsByCountry @Country NVARCHAR(50) = 'USA'
+AS BEGIN
+SELECT
+  COUNT(CustomerID) AS total_customers,
+  AVG(Score) AS avgscore
+FROM
+  SalesDB.Sales.customers
+WHERE
+  Country = @Country ;
+
+SELECT COUNT(OrderID) totalorders,
+SUM(Sales) as totalsales
+FROM SalesDB.Sales.orders o
+JOIN SalesDB.Sales.customers c
+ON o.CustomerID = c.CustomerID
+WHERE c.Country = @Country
+END;
+
+EXEC GetCustomerStatsByCountry ;
