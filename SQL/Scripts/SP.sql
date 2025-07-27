@@ -65,3 +65,30 @@ WHERE c.Country = @Country
 END;
 
 EXEC GetCustomerStatsByCountry ;
+
+--Using variables in stored procedures
+ALTER PROCEDURE GetCustomerStatsByCountry @Country NVARCHAR(50) = 'USA'
+AS BEGIN 
+DECLARE @TotalCustomers INT;
+DECLARE @AvgScore FLOAT;
+SELECT
+  @TotalCustomers = COUNT(CustomerID),
+  @AvgScore = AVG(Score)
+FROM
+  SalesDB.Sales.customers
+WHERE
+  Country = @Country ;
+-- Output the results, PRINT statement can have only string values
+PRINT 'Total Customers for' + @Country + ': ' + CAST(@TotalCustomers AS NVARCHAR(10));
+PRINT 'Average score for' + @Country + ': ' + CAST(@AvgScore AS NVARCHAR(10));
+
+SELECT COUNT(OrderID) totalorders,
+SUM(Sales) as totalsales
+FROM SalesDB.Sales.orders o
+JOIN SalesDB.Sales.customers c
+ON o.CustomerID = c.CustomerID
+WHERE c.Country = @Country
+END;
+
+EXEC GetCustomerStatsByCountry ;
+EXEC GetCustomerStatsByCountry @Country='Germany';
