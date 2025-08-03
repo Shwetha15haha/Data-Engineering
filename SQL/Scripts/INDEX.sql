@@ -10,6 +10,9 @@
 --CREATE NONCLUSTERED INDEX idx_customer_name ON customers (customer_name ASC);
 CREATE NONCLUSTERED INDEX idx_order_date ON SalesDB.Sales.orders (orderDate ASC);
 
+--by default index is created as non-clustered
+CREATE INDEX idx_order_date ON SalesDB.Sales.orders (orderDate ASC);
+
 CREATE CLUSTERED INDEX idx_product_ID ON SalesDB.Sales.products (productID ASC);
 
 DROP INDEX IF EXISTS idx_product_ID ON SalesDB.Sales.products;
