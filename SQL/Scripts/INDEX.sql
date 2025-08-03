@@ -8,8 +8,8 @@
 --CREATE [Clusterd | Non-clusterd] INDEX index_name ON table_name (column_name [ASC | DESC]);
 --CREATE CLUSTERED INDEX idx_customer_id ON customers (customer_id ASC);
 --CREATE NONCLUSTERED INDEX idx_customer_name ON customers (customer_name ASC);
-CREATE CLUSTERED INDEX idx_order_date ON SalesDB.Sales.orders (orderDate ASC);
+CREATE NONCLUSTERED INDEX idx_order_date ON SalesDB.Sales.orders (orderDate ASC);
 
-CREATE NONCLUSTERED INDEX idx_product_ID ON SalesDB.Sales.products (productID ASC);
+CREATE CLUSTERED INDEX idx_product_ID ON SalesDB.Sales.products (productID ASC);
 
 DROP INDEX IF EXISTS idx_product_ID ON SalesDB.Sales.products;
