@@ -28,4 +28,6 @@ CREATE INDEX idx_DBCustomers_CountryScore ON SalesDB.Sales.customers (country, s
 --1. Group rows 2. Columns segment 3. Compression 4. Store in Lob : large object storage
 --by default rowstore index is created
 CREATE INDEX idx_sales_rowstore ON SalesDB.Sales.orders (orderID, orderDate)
-CREATE [Clusterd | Non-clusterd] COLUMNSTORE INDEX idx_sales_columnstore ON SalesDB.Sales.orders (orderID, orderDate, customerID, productID);
+--CREATE [Clusterd | Non-clusterd] COLUMNSTORE INDEX idx_sales_columnstore ON SalesDB.Sales.orders (orderID, orderDate, customerID, productID);
+--Unique index is an index that ensures all values in the indexed column(s) are unique, preventing duplicate entries
+CREATE UNIQUE INDEX idx_unique_customer_email ON SalesDB.Sales.customers (customerID);
