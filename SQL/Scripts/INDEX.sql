@@ -22,3 +22,10 @@ CREATE INDEX idx_order_product ON SalesDB.Sales.orders (orderID, productID);
 
 --same order of columns in index as in query
 CREATE INDEX idx_DBCustomers_CountryScore ON SalesDB.Sales.customers (country, score);
+
+--Rowstore index is a type of index that stores data in a row-oriented format, optimizing for queries that access entire rows of data
+--Columnstore index is a type of index that stores data in a column-oriented format, optimizing for queries that access specific columns of data, particularly in analytical workloads
+--1. Group rows 2. Columns segment 3. Compression 4. Store in Lob : large object storage
+--by default rowstore index is created
+CREATE INDEX idx_sales_rowstore ON SalesDB.Sales.orders (orderID, orderDate)
+CREATE [Clusterd | Non-clusterd] COLUMNSTORE INDEX idx_sales_columnstore ON SalesDB.Sales.orders (orderID, orderDate, customerID, productID);
