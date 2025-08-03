@@ -31,3 +31,15 @@ CREATE INDEX idx_sales_rowstore ON SalesDB.Sales.orders (orderID, orderDate)
 --CREATE [Clusterd | Non-clusterd] COLUMNSTORE INDEX idx_sales_columnstore ON SalesDB.Sales.orders (orderID, orderDate, customerID, productID);
 --Unique index is an index that ensures all values in the indexed column(s) are unique, preventing duplicate entries
 CREATE UNIQUE INDEX idx_unique_customer_email ON SalesDB.Sales.customers (customerID);
+
+--Filtered index is an index that includes only a subset of rows in a table based on a specified filter condition, improving query performance for specific queries
+--You cannot create a filtered index on a clustered index
+--You cannot create filtered index on a columnstore table
+CREATE [UNIQUE] [NONCLUSTERED] INDEX idx_unique_order ON SalesDB.Sales.orders (orderID)
+WHERE
+  orderStatus = 'Completed';
+
+CREATE INDEX idx_filtered_orders ON SalesDB.Sales.orders (orderDate)
+WHERE
+  orderDate >= '2023-01-01'
+  AND orderDate < '2024-01-01';
