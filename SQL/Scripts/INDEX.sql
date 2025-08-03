@@ -43,3 +43,15 @@ CREATE INDEX idx_filtered_orders ON SalesDB.Sales.orders (orderDate)
 WHERE
   orderDate >= '2023-01-01'
   AND orderDate < '2024-01-01';
+
+--List all specific indexes in a table
+USE SalesDB;
+sp_helpindex 'Sales.Products';
+sp_helpindex 'Sales.Orders';
+
+--Monitoring index usage
+--you can join these tables and get info on each table using object_id
+SELECT * FROM sys.indexes;
+SELECT * FROM sys.tables;
+SELECT * FROM sys.dm_db_index_usage_stats;
+SELECT * FROM sys.dm_db_missing_index_details
