@@ -16,3 +16,9 @@ CREATE INDEX idx_order_date ON SalesDB.Sales.orders (orderDate ASC);
 CREATE CLUSTERED INDEX idx_product_ID ON SalesDB.Sales.products (productID ASC);
 
 DROP INDEX IF EXISTS idx_product_ID ON SalesDB.Sales.products;
+
+--composite index is an index that includes multiple columns, allowing for more efficient queries that filter or sort based on those columns
+CREATE INDEX idx_order_product ON SalesDB.Sales.orders (orderID, productID);
+
+--same order of columns in index as in query
+CREATE INDEX idx_DBCustomers_CountryScore ON SalesDB.Sales.customers (country, score);
