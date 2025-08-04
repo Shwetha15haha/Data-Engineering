@@ -54,4 +54,10 @@ sp_helpindex 'Sales.Orders';
 SELECT * FROM sys.indexes;
 SELECT * FROM sys.tables;
 SELECT * FROM sys.dm_db_index_usage_stats;
-SELECT * FROM sys.dm_db_missing_index_details
+SELECT * FROM sys.dm_db_missing_index_details;
+
+
+--Execute plans: To see how query engine executes a query sstep by step,  to see query usage step by step and how indexes are used
+--Read notes
+
+
