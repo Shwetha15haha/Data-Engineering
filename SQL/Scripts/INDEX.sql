@@ -61,3 +61,19 @@ SELECT * FROM sys.dm_db_missing_index_details;
 --Read notes
 
 
+--SQL HINTS
+--SQL hints are directives that can be used to influence the behavior of the query optimizer, allowing you to specify how a query should be executed
+--They can be used to override the default query optimization behavior, providing more control over query execution
+SELECT
+  *,
+  (
+    SELECT
+      COUNT(*)
+    FROM
+      SalesDB.Sales.Orders o WITH (FORCESEEK)
+    WHERE
+      o.CustomerID = c.CustomerID
+  ) totalorders
+FROM
+  SalesDB.Sales.Customers c
+  -- OPTION (HASH JOIN);
